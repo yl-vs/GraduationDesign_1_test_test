@@ -24,5 +24,18 @@ namespace GraduationDesign_1
         {
             InitializeComponent();
         }
+
+        private void M_login_Click(object sender, RoutedEventArgs e)
+        {
+            Login login = new Login();
+            login.Show();
+     
+        }
+
+        private void M_Registration_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+        }
     }
 }
