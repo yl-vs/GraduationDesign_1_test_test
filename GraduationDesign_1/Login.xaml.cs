@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraduationDesign_1.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace GraduationDesign_1
     /// </summary>
     public partial class Login : Window
     {
+        MyDbEntities context = new MyDbEntities();
         public Login()
         {
             InitializeComponent();
@@ -26,7 +28,24 @@ namespace GraduationDesign_1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            if(this.R_Name.Text == "" || this.R_password.Text == "")
+            {
+                MessageBox.Show("用户名或密码不能为空！");
+            }
+            else
+            {
+                var q = from t in context.UserTable
+                        where t.UserName == this.R_Name.Text && t.UserPasswd == this.R_password.Text
+                        select t;
+                if (q.Count() == 0)
+                    MessageBox.Show("用户名或密码不正确！");
+                else
+                {
+                    Upload upload = new Upload();
+                    upload.userName = this.R_Name.Text;
+                    upload.Show();
+                }
+            }
         }
     }
 }
