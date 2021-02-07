@@ -29,13 +29,14 @@ namespace GraduationDesign_1
         {
             Login login = new Login();
             login.Show();
-     
+            this.Close();
         }
 
         private void M_Registration_Click(object sender, RoutedEventArgs e)
         {
             Registration registration = new Registration();
             registration.Show();
+            this.Close();
         }
     }
 }
