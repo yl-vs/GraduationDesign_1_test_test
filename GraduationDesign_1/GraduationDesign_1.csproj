@@ -110,6 +110,7 @@
     <Compile Include="Registration.xaml.cs">
       <DependentUpon>Registration.xaml</DependentUpon>
     </Compile>
+    <Compile Include="System\Web\HttpContext.cs" />
     <Compile Include="Upload.xaml.cs">
       <DependentUpon>Upload.xaml</DependentUpon>
     </Compile>
