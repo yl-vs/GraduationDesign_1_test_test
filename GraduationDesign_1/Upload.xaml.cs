@@ -26,13 +26,14 @@ namespace GraduationDesign_1
         private string FilePath;
         private string FileName;
         public string userName { get; set; }
+        public MyDbEntities context = new MyDbEntities();
 
         public Upload()
         {
             InitializeComponent();
         }
         private void showUsers()
-        {   
+        {
             var context = new MyDbEntities();
             //step1 1
             if (context != null)
@@ -46,21 +47,26 @@ namespace GraduationDesign_1
             this.downloadComo.Items.Clear();
             this.downloadComo.ItemsSource = q.ToList();
         }
-        //判断需要使用的功能
-        private void choseFunc()
+
+        private int getID(string name)
         {
-            ComboBoxItem item = this.uploadComo.SelectedItem as ComboBoxItem;
-            string function = item.Content.ToString();
-            this.downloadComo.ItemsSource = null;
-            if (function == "单一用户存储文件")
+            var q = from t in context.UserTable
+                    where t.UserName == name
+                    select t.UserId;
+            return q.First();
+        }
+
+        private void saveFile(FileTable file)
+        {
+            try
             {
-                ComboBoxItem item1 = new ComboBoxItem();
-                item1.Content = userName;
-                this.downloadComo.Items.Add(item1);
+                context.FileTable.Add(file);
+                int i = context.SaveChanges();
+                MessageBox.Show("success!");
             }
-            else if(function == "用户间传递数据")
+            catch (Exception ex)
             {
-                showUsers();
+                MessageBox.Show(ex.ToString());
             }
         }
         //选择所要上传的文件
@@ -82,7 +88,19 @@ namespace GraduationDesign_1
 
         private void uploadComo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            choseFunc();
+            ComboBoxItem item = this.uploadComo.SelectedItem as ComboBoxItem;
+            string function = item.Content.ToString();
+            this.downloadComo.ItemsSource = null;
+            if (function == "单一用户存储文件")
+            {
+                ComboBoxItem item1 = new ComboBoxItem();
+                item1.Content = userName;
+                this.downloadComo.Items.Add(item1);
+            }
+            else if (function == "用户间传递数据")
+            {
+                showUsers();
+            }
         }
 
         private void U_upload_Click(object sender, RoutedEventArgs e)
@@ -91,52 +109,52 @@ namespace GraduationDesign_1
             //加密文件内容
             AesHelp.GenKeyIV(out key, out iv);
             AesHelp.EncryptString(FilePath, "../../files/" + userName + "_" + FileName, key, iv);
-            saveFile(key, iv);
+            createFile(key, iv);
         }
         //存储文件
-        private void saveFile(byte[] key, byte[] iv)
+        private void createFile(byte[] key, byte[] iv)
         {
             FileTable file = new FileTable();
             file.FileName = FileName;
-            file.FilePath = FilePath;
-            file.SessionKey = saveSessionKey(key, iv);
+            file.FilePath = "../../files/" + userName + "_" + FileName;
+            
 
-            using (var context = new MyDbEntities())
+
+            if (this.uploadComo.SelectedIndex == 0)
             {
-                var q = from t in context.UserTable
-                        where t.UserName == userName
-                        select t.UserId;
-                file.UploadId = q.First();
-                if (this.uploadComo.SelectedIndex == 0)
-                    file.DownloadId = q.First();
-                else if (this.uploadComo.SelectedIndex == 1)
-                    file.DownloadId = this.downloadComo.SelectedIndex;
-                try
+                file.SessionKey = saveSessionKey(key, iv,userName);
+                file.DownloadId = getID(userName);
+                saveFile(file);
+            }
+            else if (this.uploadComo.SelectedIndex == 1)
+            {
+                foreach (var item in this.downloadComo.SelectedItems)
                 {
-                    context.FileTable.Add(file);
-                    int i = context.SaveChanges();
-                    MessageBox.Show("success!");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
+                    file.DownloadId = getID(item.ToString());
+                    file.SessionKey = saveSessionKey(key, iv, item.ToString());
+                    saveFile(file);
                 }
             }
+
         }
-        private string saveSessionKey(byte[] key, byte[] iv)
+        //加密并保存会话密钥
+        private string saveSessionKey(byte[] key, byte[] iv,string name)
         {
             string publicKey, keyPath, sessionKey;
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            string pubPath = @"../../PublicKey/" + userName + "_publicKey.xml";
+            //导入下载方RSA公钥
+            string pubPath = @"../../PublicKey/" + name + "_publicKey.xml";
             using (StreamReader sr = new StreamReader(pubPath))
             {
                 publicKey = sr.ReadLine();
             }
             rsa.FromXmlString(publicKey);
+            //使用下载方公钥加密会话密钥
             byte[] keySession = rsa.Encrypt(key, false);
             byte[] ivSession = rsa.Encrypt(iv, false);
-            FileName = FileName.Split('.')[0] ;
-            keyPath = @"../../SessionKey/" + userName +"_"+FileName+ "_RSAkey.xml";
+            //存储加密后的会话密钥
+            FileName = FileName.Split('.')[0];
+            keyPath = @"../../SessionKey/" + name + "_" + FileName + "_RSAkey.xml";
             sessionKey = Convert.ToBase64String(keySession) + "," + Convert.ToBase64String(ivSession);
             FileStream fs = new FileStream(keyPath, FileMode.Create, FileAccess.Write);
             fs.Close();
@@ -147,20 +165,5 @@ namespace GraduationDesign_1
             }
             return keyPath;
         }
-            //private void decrypt()
-            //{
-            //using (StreamReader sr = new StreamReader(priPath))
-            //{
-            //    privateKey = sr.ReadLine();
-            //}
-            //    //解密文件内容
-            //    rsa.FromXmlString(privateKey);
-            //    byte[] decrypt = rsa.Decrypt(encrypt, false);
-            //    //this.txt.Text = AesHelp.DescyrptString("../../files/" + userName + "_" + FileName, decrypt, iv);
-            //    string asd = Convert.ToBase64String(iv);//存储iv
-            //    this.txt.Text = Convert.ToBase64String(iv);
-            //    //解密key,iv  byte[] ds = Convert.FromBase64String(asd);
-            //}
-
-        }
+    }
 }

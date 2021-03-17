@@ -14,6 +14,7 @@ namespace GraduationDesign_1.Models
     
     public partial class FileTable
     {
+        public int Id { get; set; }
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string SessionKey { get; set; }

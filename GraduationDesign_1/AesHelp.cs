@@ -43,7 +43,7 @@ namespace GraduationDesign_1
         /// <summary>
         /// 解密
         /// </summary>
-        public static string DescyrptString(string cryptPath, byte[] key, byte[] iv)
+        public static string DescyrptString(string cryptPath,string plainPath, byte[] key, byte[] iv)
         {
             string str = null;
             FileStream fsCrypt = new FileStream(cryptPath, FileMode.Open, FileAccess.Read);
@@ -51,11 +51,17 @@ namespace GraduationDesign_1
             {
                 ICryptoTransform decryptor = aesAlg.CreateDecryptor(key, iv);
                 CryptoStream cs = new CryptoStream(fsCrypt, decryptor, CryptoStreamMode.Read);
-                using (StreamReader sr = new StreamReader(cs))
+                FileStream fsPlaint = new FileStream(plainPath, FileMode.Create, FileAccess.Write);
+                using (StreamReader sr=new StreamReader(cs))
                 {
                     str = sr.ReadToEnd();
                 }
+                using (StreamWriter sw = new StreamWriter(fsPlaint))
+                {
+                    sw.Write(str);
+                }
                 fsCrypt.Close();
+                fsPlaint.Close();
                 cs.Close();
             }
             return str;

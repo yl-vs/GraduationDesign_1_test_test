@@ -27,8 +27,11 @@ namespace GraduationDesign_1
 
         private void M_login_Click(object sender, RoutedEventArgs e)
         {
-            Login login = new Login();
-            login.Show();
+            //Login login = new Login();
+            //login.Show();
+            IndexWindow indexWindow = new IndexWindow();
+            indexWindow.userName = "安好";
+            indexWindow.Show();
             this.Close();
         }
 

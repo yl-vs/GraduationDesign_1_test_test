@@ -27,6 +27,7 @@ namespace GraduationDesign_1
         {
             InitializeComponent();
         }
+        //查看数据库中所有的用户
         private void showUsers()
         {
             var context = new MyDbEntities();
@@ -53,15 +54,15 @@ namespace GraduationDesign_1
                 this.R_password_Confirm.Text = "";
             }
             else
-            {   
+            {
                 UserTable user = new UserTable();
                 user.UserName = this.R_Name.Text;
                 user.UserPasswd = this.R_password.Text;
-                user.PrivateKey = this.R_Name.Text+ "_privateKey.xml";
+                user.PrivateKey = this.R_Name.Text + "_privateKey.xml";
                 user.PublicKey = this.R_Name.Text + "_publicKey.xml";
                 CreateKey(this.R_Name.Text);
                 //showUsers();
-                
+
                 using (var context = new MyDbEntities())
                 {
                     try
@@ -76,7 +77,7 @@ namespace GraduationDesign_1
                         MessageBox.Show("fail!");
                     }
                 }
-                
+
             }
         }
         //创建RSA公私钥对

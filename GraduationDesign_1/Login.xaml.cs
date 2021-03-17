@@ -41,18 +41,10 @@ namespace GraduationDesign_1
                     MessageBox.Show("用户名或密码不正确！");
                 else
                 {
-                    Upload upload = new Upload();
-                    upload.userName = this.R_Name.Text;
-                    upload.Show();
-
-                    //下载
-                    //1.通过UserName查到UserId
-                    var p = from t in context.UserTable
-                            where t.UserName == this.R_Name.Text
-                            select t.UserId;
-
-                    Download download = new Download();
-                    download.D_downloadid = (TextBox)p;
+                    IndexWindow indexWindow = new IndexWindow();
+                    indexWindow.userName = this.R_Name.Text;
+                    indexWindow.Show();
+                    this.Close();
                 }
             }
         }

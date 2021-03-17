@@ -26,13 +26,12 @@
                     </LinearGradientBrush>
                 </TextBlock.OpacityMask>
             </TextBlock>
-            <Button x:Name="D_clear" Content="清除选中项" HorizontalAlignment="Left" Margin="87,276,0,0" VerticalAlignment="Top" Width="75" Click="D_clear_Click"/>
-            <Label Content="可下载的文件选项：" HorizontalAlignment="Left" Margin="136,47,0,0" VerticalAlignment="Top"/>
+
             <ListBox x:Name="Filelist" HorizontalAlignment="Left" Height="158" Margin="62,75,0,0" VerticalAlignment="Top" Width="272" SelectionMode="Multiple"/>
-            <Button x:Name="D_download" Content="下载选中项" HorizontalAlignment="Left" Margin="224,276,0,0" VerticalAlignment="Top" Width="75" Click="D_download_Click" RenderTransformOrigin="1.4,0.368"/>
+            <Button x:Name="D_download" Content="下载选中项" HorizontalAlignment="Left" Margin="283,257,0,0" VerticalAlignment="Top" Width="75" Click="D_download_Click" RenderTransformOrigin="1.4,0.368"/>
             <Button x:Name="D_retrieve" Content="检索" HorizontalAlignment="Left" Margin="283,49,0,0" VerticalAlignment="Top" Width="51" Click="D_retrieve_Click" RenderTransformOrigin="-0.216,-0.158"/>
-            <Label Content="用户" HorizontalAlignment="Left" Margin="0,47,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="D_downloadid" HorizontalAlignment="Left" Height="23" Margin="39,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="92" RenderTransformOrigin="0.142,0.391" Background="#FFE8D8D8"/>
+            <TextBox x:Name="searchFile" HorizontalAlignment="Left" Height="19" Margin="62,50,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="207"/>
+            <TextBox x:Name="downloadPath" HorizontalAlignment="Left" Height="23" Margin="45,258,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="224"/>
         </Grid>
 
     </Grid>

@@ -4,14 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MyDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="FileTable">
           <Key>
-            <PropertyRef Name="FilePath" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FilePath" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="FileName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="SessionKey" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="SessionKey" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="UploadId" Type="int" Nullable="false" />
           <Property Name="DownloadId" Type="int" Nullable="false" />
         </EntityType>
@@ -22,10 +23,10 @@
           <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="UserPasswd" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="PublicKey" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="PrivateKey" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PublicKey" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PrivateKey" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="MyDbModelStoreContainer">
+        <EntityContainer Name="ModelsStoreContainer">
           <EntitySet Name="FileTable" EntityType="Self.FileTable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserTable" EntityType="Self.UserTable" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -33,14 +34,15 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="MyDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="FileTable">
           <Key>
-            <PropertyRef Name="FilePath" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SessionKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SessionKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="UploadId" Type="Int32" Nullable="false" />
           <Property Name="DownloadId" Type="Int32" Nullable="false" />
         </EntityType>
@@ -51,8 +53,8 @@
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="UserPasswd" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PublicKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PrivateKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PublicKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PrivateKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityContainer Name="MyDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="FileTable" EntityType="Self.FileTable" />
@@ -63,10 +65,11 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MyDbModelStoreContainer" CdmEntityContainer="MyDbEntities">
+        <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="MyDbEntities">
           <EntitySetMapping Name="FileTable">
-            <EntityTypeMapping TypeName="MyDbModel.FileTable">
+            <EntityTypeMapping TypeName="Models.FileTable">
               <MappingFragment StoreEntitySet="FileTable">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="SessionKey" ColumnName="SessionKey" />
@@ -76,7 +79,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserTable">
-            <EntityTypeMapping TypeName="MyDbModel.UserTable">
+            <EntityTypeMapping TypeName="Models.UserTable">
               <MappingFragment StoreEntitySet="UserTable">
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
