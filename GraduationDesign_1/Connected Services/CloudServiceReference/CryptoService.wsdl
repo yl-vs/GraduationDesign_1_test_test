@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CryptoService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_ICryptoService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsrm:RMAssertion xmlns:wsrm="http://schemas.xmlsoap.org/ws/2005/02/rm/policy">
+          <wsrm:InactivityTimeout Milliseconds="600000" />
+          <wsrm:AcknowledgementInterval Milliseconds="200" />
+        </wsrm:RMAssertion>
+        <cdp:CompositeDuplex xmlns:cdp="http://schemas.microsoft.com/net/2006/06/duplex" />
+        <ow:OneWay xmlns:ow="http://schemas.microsoft.com/ws/2005/05/routing/policy" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:10871/CryptoService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:10871/CryptoService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:10871/CryptoService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ICryptoService_Login_InputMessage">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_Login_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_AddUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddUser" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_AddUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_showUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:showUsers" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_showUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:showUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_createFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:createFile" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_createFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:createFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_choseFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:choseFile" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_choseFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:choseFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_DisplayFiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayFiles" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_DisplayFiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayFilesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_FindFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:FindFile" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_FindFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FindFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_DecryptFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:DecryptFile" />
+  </wsdl:message>
+  <wsdl:message name="ICryptoService_DecryptFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DecryptFileResponse" />
+  </wsdl:message>
+  <wsdl:portType msc:usingSession="true" name="ICryptoService">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Login">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICryptoService/Login" message="tns:ICryptoService_Login_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICryptoService/LoginResponse" message="tns:ICryptoService_Login_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="AddUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICryptoService/AddUser" message="tns:ICryptoService_AddUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICryptoService/AddUserResponse" message="tns:ICryptoService_AddUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="showUsers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICryptoService/showUsers" message="tns:ICryptoService_showUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICryptoService/showUsersResponse" message="tns:ICryptoService_showUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="createFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICryptoService/createFile" message="tns:ICryptoService_createFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICryptoService/createFileResponse" message="tns:ICryptoService_createFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="choseFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICryptoService/choseFile" message="tns:ICryptoService_choseFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICryptoService/choseFileResponse" message="tns:ICryptoService_choseFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="DisplayFiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICryptoService/DisplayFiles" message="tns:ICryptoService_DisplayFiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICryptoService/DisplayFilesResponse" message="tns:ICryptoService_DisplayFiles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="FindFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICryptoService/FindFile" message="tns:ICryptoService_FindFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICryptoService/FindFileResponse" message="tns:ICryptoService_FindFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="DecryptFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICryptoService/DecryptFile" message="tns:ICryptoService_DecryptFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICryptoService/DecryptFileResponse" message="tns:ICryptoService_DecryptFile_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSDualHttpBinding_ICryptoService" type="tns:ICryptoService">
+    <wsp:PolicyReference URI="#WSDualHttpBinding_ICryptoService_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Login">
+      <soap12:operation soapAction="http://tempuri.org/ICryptoService/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUser">
+      <soap12:operation soapAction="http://tempuri.org/ICryptoService/AddUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="showUsers">
+      <soap12:operation soapAction="http://tempuri.org/ICryptoService/showUsers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createFile">
+      <soap12:operation soapAction="http://tempuri.org/ICryptoService/createFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="choseFile">
+      <soap12:operation soapAction="http://tempuri.org/ICryptoService/choseFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisplayFiles">
+      <soap12:operation soapAction="http://tempuri.org/ICryptoService/DisplayFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindFile">
+      <soap12:operation soapAction="http://tempuri.org/ICryptoService/FindFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DecryptFile">
+      <soap12:operation soapAction="http://tempuri.org/ICryptoService/DecryptFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CryptoService">
+    <wsdl:port name="WSDualHttpBinding_ICryptoService" binding="tns:WSDualHttpBinding_ICryptoService">
+      <soap12:address location="http://localhost:10871/CryptoService.svc" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>http://localhost:10871/CryptoService.svc</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

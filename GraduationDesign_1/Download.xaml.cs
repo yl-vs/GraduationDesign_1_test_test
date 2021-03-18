@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Windows;
-using GraduationDesign_1.Models;
 using System.Data;
 using System.IO;
 using System.Security.Cryptography;
 using System;
 using System.Windows.Forms;
+using GraduationDesign_1.CloudServiceReference;
 
 namespace GraduationDesign_1
 {
@@ -14,33 +14,129 @@ namespace GraduationDesign_1
     /// </summary>
     public partial class Download : Window
     {
+        private CryptoServiceClient client = new CryptoServiceClient();
         public string userName { get; set; }
-        public MyDbEntities context = new MyDbEntities();
         public Download(string name)
         {
             userName = name;
             InitializeComponent();
             this.Filelist.Items.Clear();
-            DisplayFiles();
+            this.Filelist.ItemsSource = client.DisplayFiles(userName);
+            //DisplayFiles();
         }
-        private int getID(string name)
-        {
-            var q = from t in context.UserTable
-                    where t.UserName == name
-                    select t.UserId;
-            return q.First();
-        }
-        //显示用户可以下载的文件
-        private void DisplayFiles()
-        {
+        //private int getID(string name)
+        //{
+        //    var q = from t in context.UserTable
+        //            where t.UserName == name
+        //            select t.UserId;
+        //    return q.First();
+        //}
+        ////显示用户可以下载的文件
+        //private void DisplayFiles()
+        //{
 
-            var q = from t in context.FileTable
-                    from m in context.UserTable
-                    where m.UserName == userName && t.DownloadId == m.UserId
-                    select t.FileName;
-            this.Filelist.ItemsSource = q.ToList();
+        //    var q = from t in context.FileTable
+        //            from m in context.UserTable
+        //            where m.UserName == userName && t.DownloadId == m.UserId
+        //            select t.FileName;
+        //    this.Filelist.ItemsSource = q.ToList();
+
+        //}
+        
+        //搜索用户想要下载的文件
+        private void D_retrieve_Click(object sender, RoutedEventArgs e)
+        {
+            string file = this.searchFile.Text;
+            this.Filelist.ItemsSource = client.FindFile(file, userName);
+
+
+            //var q = from t in context.FileTable
+            //        from m in context.UserTable
+            //        where t.FileName.Contains(file) && m.UserName == userName && t.DownloadId == m.UserId
+            //        select t.FileName;
+            //this.Filelist.ItemsSource = q.ToList();
+
 
         }
+
+        //private void decrypt(string priPath,string sessionPath,string filePath)
+        //{
+        //    string privateKey,sessionKey;
+        //    byte[] enkey, eniv;
+        //    using(StreamReader sr=new StreamReader(sessionPath))
+        //    {
+        //        sessionKey = sr.ReadToEnd();
+        //    }
+        //    string[] s = sessionKey.Split(',');
+        //    enkey = Convert.FromBase64String(s[0]);
+        //    eniv = Convert.FromBase64String(s[1]);
+
+        //    using (StreamReader sr = new StreamReader(priPath))
+        //    {
+        //        privateKey = sr.ReadLine();
+        //    }
+        //    //解密会话密钥
+        //    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+        //    rsa.FromXmlString(privateKey);
+        //    byte[] key = rsa.Decrypt(enkey, false);
+        //    byte[] iv = rsa.Decrypt(eniv, false);
+        //    //解密文件
+        //    string[] fileName = filePath.Split('/');
+        //    string downFile = this.downloadPath.Text + "\\" + fileName[fileName.Length - 1];
+        //    string decrypt = AesHelp.DescyrptString(filePath, downFile, key, iv);
+        //    using (StreamWriter sw = new StreamWriter(downFile))
+        //    {
+        //        sw.WriteLine(decrypt);
+        //    }
+        //    //this.txt.Text = AesHelp.DescyrptString("../../files/" + userName + "_" + FileName, decrypt, iv);
+        //    //string asd = Convert.ToBase64String(iv);//存储iv
+        //    //this.txt.Text = Convert.ToBase64String(iv);
+        //    //解密key,iv  byte[] ds = Convert.FromBase64String(asd);
+        //}
+
+
+        //将用户选中的选项下载并且解密
+        private void D_download_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog m_Dialog = new FolderBrowserDialog();
+            DialogResult result = m_Dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            this.downloadPath.Text = m_Dialog.SelectedPath.Trim();
+
+
+
+            string filename;
+            foreach (var name in this.Filelist.SelectedItems)
+            {
+                filename = name.ToString();
+                client.DecryptFile(filename, userName, this.downloadPath.Text);
+                //var q = from t in context.FileTable
+                //        from m in context.UserTable
+                //        where t.FileName == filename && m.UserName == userName 
+                //        && t.DownloadId == m.UserId
+                //        select new { t.FilePath,t.SessionKey,m.PrivateKey};
+                //foreach (var item in q)
+                //{
+                //    prikey = @"../../PrivateKey/" + item.PrivateKey;
+                //    decrypt(prikey, item.SessionKey, item.FilePath);
+                //}
+            }
+            
+            
+            
+            /**
+            //TransmitFile实现下载
+            Response.ContentType = "application/x-zip-compressed";
+            Response.AddHeader("Content-Disposition", "attachment;filename=z.zip");
+            string filename = Server.MapPath("DownLoad/z.zip");
+            Response.TransmitFile(filename);
+            **/
+        }
+
         ////将用户选中的选项删除同时需要删除数据库中的相应数据段
         //private void D_clear_Click(object sender, RoutedEventArgs e)
         //{
@@ -59,100 +155,6 @@ namespace GraduationDesign_1
         //        }
         //    }
         //}
-        //搜索用户想要下载的文件
-        private void D_retrieve_Click(object sender, RoutedEventArgs e)
-        {
-            string file = this.searchFile.Text;
-
-            var q = from t in context.FileTable
-                    from m in context.UserTable
-                    where t.FileName.Contains(file) && m.UserName == userName && t.DownloadId == m.UserId
-                    select t.FileName;
-            this.Filelist.ItemsSource = q.ToList();
-
-
-        }
-
-        private void decrypt(string priPath,string sessionPath,string filePath)
-        {
-            string privateKey,sessionKey;
-            byte[] enkey, eniv;
-            using(StreamReader sr=new StreamReader(sessionPath))
-            {
-                sessionKey = sr.ReadToEnd();
-            }
-            string[] s = sessionKey.Split(',');
-            enkey = Convert.FromBase64String(s[0]);
-            eniv = Convert.FromBase64String(s[1]);
-
-            using (StreamReader sr = new StreamReader(priPath))
-            {
-                privateKey = sr.ReadLine();
-            }
-            //解密会话密钥
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(privateKey);
-            byte[] key = rsa.Decrypt(enkey, false);
-            byte[] iv = rsa.Decrypt(eniv, false);
-            //解密文件
-            string[] fileName = filePath.Split('/');
-            string downFile = this.downloadPath.Text + "\\" + fileName[fileName.Length - 1];
-            string decrypt = AesHelp.DescyrptString(filePath, downFile, key, iv);
-            using (StreamWriter sw = new StreamWriter(downFile))
-            {
-                sw.WriteLine(decrypt);
-            }
-            //this.txt.Text = AesHelp.DescyrptString("../../files/" + userName + "_" + FileName, decrypt, iv);
-            //string asd = Convert.ToBase64String(iv);//存储iv
-            //this.txt.Text = Convert.ToBase64String(iv);
-            //解密key,iv  byte[] ds = Convert.FromBase64String(asd);
-        }
-
-
-        //将用户选中的选项下载并且解密
-        private void D_download_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog m_Dialog = new FolderBrowserDialog();
-            DialogResult result = m_Dialog.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.Cancel)
-            {
-                return;
-            }
-            this.downloadPath.Text = m_Dialog.SelectedPath.Trim();
-
-
-
-            string filename,sessionkey,filepath, prikey;
-            foreach (var name in this.Filelist.SelectedItems)
-            {
-                filename = name.ToString();
-                var q = from t in context.FileTable
-                        from m in context.UserTable
-                        where t.FileName == filename && m.UserName == userName 
-                        && t.DownloadId == m.UserId
-                        select new { t.FilePath,t.SessionKey,m.PrivateKey};
-                foreach (var item in q)
-                {
-                    filepath = item.FilePath;
-                    sessionkey = item.SessionKey;
-                    prikey = @"../../PrivateKey/" + item.PrivateKey;
-                    decrypt(prikey, sessionkey, filepath);
-                }
-            }
-            
-            
-            
-            /**
-            //TransmitFile实现下载
-            Response.ContentType = "application/x-zip-compressed";
-            Response.AddHeader("Content-Disposition", "attachment;filename=z.zip");
-            string filename = Server.MapPath("DownLoad/z.zip");
-            Response.TransmitFile(filename);
-            **/
-        }
-
-
         /***
         /// <summary>
         /// 使用微软的TransmitFile下载文件
