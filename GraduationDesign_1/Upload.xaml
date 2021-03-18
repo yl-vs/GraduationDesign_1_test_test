@@ -22,18 +22,16 @@
                     </LinearGradientBrush>
                 </TextBlock.OpacityMask>
             </TextBlock>
-            <Button x:Name="U_upload" Content="上传到云端" HorizontalAlignment="Left" Margin="154,223,0,0" VerticalAlignment="Top" Width="75" Click="U_upload_Click"/>
-            <Label Content="文件名" HorizontalAlignment="Left" Margin="55,65,0,0" VerticalAlignment="Top" Width="74"/>
-            <Label Content="存储功能" HorizontalAlignment="Left" Margin="55,102,0,0" VerticalAlignment="Top" Width="74"/>
-            <TextBox Name="txt" HorizontalAlignment="Left" Height="23" Margin="143,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147"/>
-            <ComboBox Name="uploadComo" HorizontalAlignment="Left" Margin="143,106,0,0" VerticalAlignment="Top" Width="147" RenderTransformOrigin="0.273,0.153" SelectionChanged="uploadComo_SelectionChanged">
+            <Button x:Name="U_upload" Content="上传到云端" HorizontalAlignment="Left" Margin="154,269,0,0" VerticalAlignment="Top" Width="75" Click="U_upload_Click"/>
+            <Label Content="存储功能" HorizontalAlignment="Left" Margin="55,60,0,0" VerticalAlignment="Top" Width="74"/>
+            <ComboBox Name="uploadComo" HorizontalAlignment="Left" Margin="143,62,0,0" VerticalAlignment="Top" Width="147" RenderTransformOrigin="0.273,0.153" SelectionChanged="uploadComo_SelectionChanged">
                 <ComboBoxItem Content="单一用户存储文件"/>
                 <ComboBoxItem Content="用户间传递数据"/>
             </ComboBox>
-            <Label Content="允许下载方" HorizontalAlignment="Left" Margin="55,144,0,0" VerticalAlignment="Top" Width="74"/>
-            <ComboBox Name="downloadComo" HorizontalAlignment="Left" Margin="143,148,0,0" VerticalAlignment="Top" Width="147" RenderTransformOrigin="0.273,0.153"/>
-            <TextBox Name="fileName" HorizontalAlignment="Left" Height="23" Margin="39,186,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="178"/>
-            <Button Name="choseFileBtn" Content="选择文件" HorizontalAlignment="Left" Margin="237,189,0,0" VerticalAlignment="Top" Width="75" Click="choseFileBtn_Click"/>
+            <Label Content="选择可下载方" HorizontalAlignment="Left" Margin="39,98,0,0" VerticalAlignment="Top" Width="90"/>
+            <ListBox Name="downloadComo" HorizontalAlignment="Left" Height="102" Margin="143,98,0,0" VerticalAlignment="Top" Width="147" SelectionMode="Multiple"/>
+            <TextBox Name="fileName" HorizontalAlignment="Left" Height="23" Margin="39,226,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="178"/>
+            <Button Name="choseFileBtn" Content="选择文件" HorizontalAlignment="Left" Margin="237,225,0,0" VerticalAlignment="Top" Width="75" Click="choseFileBtn_Click"/>
         </Grid>
     </Grid>
 </Window>

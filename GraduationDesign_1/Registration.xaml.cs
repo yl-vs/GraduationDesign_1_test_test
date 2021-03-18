@@ -1,4 +1,4 @@
-﻿using GraduationDesign_1.Models;
+﻿using GraduationDesign_1.CloudServiceReference;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -27,20 +27,21 @@ namespace GraduationDesign_1
         {
             InitializeComponent();
         }
-        private void showUsers()
-        {
-            var context = new MyDbEntities();
-            //step1 1
-            if (context != null)
-            {
-                context.Dispose();
-                context = new MyDbEntities();
-            }
-            var q = from t in context.UserTable
-                    select t;
-            //step 3
-            //this.dataGrid.ItemsSource = q.ToList();
-        }
+        //查看数据库中所有的用户
+        //private void showUsers()
+        //{
+        //    var context = new MyDbEntities();
+        //    //step1 1
+        //    if (context != null)
+        //    {
+        //        context.Dispose();
+        //        context = new MyDbEntities();
+        //    }
+        //    var q = from t in context.UserTable
+        //            select t;
+        //    //step 3
+        //    //this.dataGrid.ItemsSource = q.ToList();
+        //}
         private void R_Submit_Click(object sender, RoutedEventArgs e)
         {
             if(this.R_Name.Text=="" || this.R_password.Text == "" || this.R_password_Confirm.Text=="")
@@ -53,53 +54,64 @@ namespace GraduationDesign_1
                 this.R_password_Confirm.Text = "";
             }
             else
-            {   
-                UserTable user = new UserTable();
-                user.UserName = this.R_Name.Text;
-                user.UserPasswd = this.R_password.Text;
-                user.PrivateKey = this.R_Name.Text+ "_privateKey.xml";
-                user.PublicKey = this.R_Name.Text + "_publicKey.xml";
-                CreateKey(this.R_Name.Text);
-                //showUsers();
-                
-                using (var context = new MyDbEntities())
+            {
+                CryptoServiceClient client = new CryptoServiceClient();
+                bool flag = client.AddUser(this.R_Name.Text, this.R_password.Text);
+                if(flag)
                 {
-                    try
-                    {
-                        context.UserTable.Add(user);
-                        int i = context.SaveChanges();
-                        MessageBox.Show("success!");
-                        this.Close();
-                    }
-                    catch
-                    {
-                        MessageBox.Show("fail!");
-                    }
+                    MessageBox.Show("success!");
+                    this.Close();
                 }
-                
-            }
-        }
-        //创建RSA公私钥对
-        private void CreateKey(string userName)
-        {
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            string priPath = @"../../PrivateKey/" + this.R_Name.Text + "_privateKey.xml";
-            string pubPath = @"../../PublicKey/" + this.R_Name.Text + "_publicKey.xml";
+                else
+                {
+                    MessageBox.Show("fail!");
+                }
+                //UserTable user = new UserTable();
+                //user.UserName = this.R_Name.Text;
+                //user.UserPasswd = this.R_password.Text;
+                //user.PrivateKey = this.R_Name.Text + "_privateKey.xml";
+                //user.PublicKey = this.R_Name.Text + "_publicKey.xml";
+                //CreateKey(this.R_Name.Text);
+                ////showUsers();
 
-            FileStream fs1 = new FileStream(priPath, FileMode.Create,FileAccess.Write);
-            FileStream fs2 = new FileStream(pubPath, FileMode.Create, FileAccess.Write);
-            fs1.Close(); fs2.Close();
-            //私钥
-            using (StreamWriter sw = new StreamWriter(priPath))
-            {
-                sw.WriteLine(rsa.ToXmlString(true));
-            }
-            
-            //公钥
-            using (StreamWriter sw = new StreamWriter(pubPath))
-            {
-                sw.WriteLine(rsa.ToXmlString(false));
+                //using (var context = new MyDbEntities())
+                //{
+                //    try
+                //    {
+                //        context.UserTable.Add(user);
+                //        int i = context.SaveChanges();
+                //        MessageBox.Show("success!");
+                //        this.Close();
+                //    }
+                //    catch
+                //    {
+                //        MessageBox.Show("fail!");
+                //    }
+                //}
+
             }
         }
+        ////创建RSA公私钥对
+        //private void CreateKey(string userName)
+        //{
+        //    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+        //    string priPath = @"../../PrivateKey/" + this.R_Name.Text + "_privateKey.xml";
+        //    string pubPath = @"../../PublicKey/" + this.R_Name.Text + "_publicKey.xml";
+
+        //    FileStream fs1 = new FileStream(priPath, FileMode.Create,FileAccess.Write);
+        //    FileStream fs2 = new FileStream(pubPath, FileMode.Create, FileAccess.Write);
+        //    fs1.Close(); fs2.Close();
+        //    //私钥
+        //    using (StreamWriter sw = new StreamWriter(priPath))
+        //    {
+        //        sw.WriteLine(rsa.ToXmlString(true));
+        //    }
+            
+        //    //公钥
+        //    using (StreamWriter sw = new StreamWriter(pubPath))
+        //    {
+        //        sw.WriteLine(rsa.ToXmlString(false));
+        //    }
+        //}
     }
 }

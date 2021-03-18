@@ -29,6 +29,9 @@ namespace GraduationDesign_1
         {
             Login login = new Login();
             login.Show();
+            //IndexWindow indexWindow = new IndexWindow();
+            //indexWindow.userName = "安好";
+            //indexWindow.Show();
             this.Close();
         }
 
@@ -36,7 +39,6 @@ namespace GraduationDesign_1
         {
             Registration registration = new Registration();
             registration.Show();
-            this.Close();
         }
     }
 }
